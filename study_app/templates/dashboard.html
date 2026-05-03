@@ -1,0 +1,96 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель ученика | AI Study Helper</title>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="container nav">
+            <a class="brand" href="{% url 'index' %}">AI Study Helper</a>
+            <div class="nav-links">
+                <span class="user-badge">{{ request.user.username }}</span>
+                <a href="{% url 'logout' %}" class="btn btn-outline">Выйти</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container dashboard-layout" id="dashboard-root">
+        <section class="card profile-panel">
+            <h2>Профиль ученика</h2>
+            <p>Добро пожаловать, <strong>{{ request.user.first_name|default:request.user.username }}</strong>.</p>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span>Всего тестов</span>
+                    <strong>{{ profile.total_quizzes }}</strong>
+                </div>
+                <div class="stat-item">
+                    <span>Средний балл</span>
+                    <strong>{{ profile.average_score }}%</strong>
+                </div>
+                <div class="stat-item">
+                    <span>Лучший балл</span>
+                    <strong>{{ profile.best_score }}%</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Предметы</h2>
+            <div class="subject-grid">
+                {% for subject in subjects %}
+                    <a href="{% url 'quiz' subject.id %}" class="subject-card">
+                        <h3>{{ subject.name }}</h3>
+                        <p>{{ subject.description }}</p>
+                        <span>Пройти тест</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>AI-помощник</h2>
+            <p class="subtle">Задайте вопрос по теме, и помощник даст быстрый ориентир для подготовки.</p>
+            <div class="ai-box">
+                <textarea id="ai-question" placeholder="Например: как лучше запомнить формулы по алгебре?"></textarea>
+                <button class="btn btn-primary" id="ai-ask-btn">Спросить AI</button>
+            </div>
+            <div id="ai-answer" class="ai-answer"></div>
+        </section>
+
+        <section class="card">
+            <h2>Последние результаты</h2>
+            {% if results %}
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Предмет</th>
+                            <th>Результат</th>
+                            <th>Верных ответов</th>
+                            <th>Дата</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                            <tr>
+                                <td>{{ result.subject.name }}</td>
+                                <td>{{ result.score_percent }}%</td>
+                                <td>{{ result.correct_answers }}/{{ result.total_questions }}</td>
+                                <td>{{ result.created_at|date:"d.m.Y H:i" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Пока нет попыток. Выберите предмет и пройдите первый тест.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>

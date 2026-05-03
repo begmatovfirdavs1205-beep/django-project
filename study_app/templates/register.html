@@ -1,0 +1,43 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация | AI Study Helper</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body class="auth-page">
+    <div class="auth-wrapper">
+        <a href="{% url 'index' %}" class="brand">AI Study Helper</a>
+        <form method="post" class="card auth-card">
+            {% csrf_token %}
+            <h1>Регистрация</h1>
+            <p class="subtle">Создайте аккаунт и откройте панель ученика.</p>
+
+            {% if form.errors %}
+                <div class="error-message">Проверьте поля формы и попробуйте снова.</div>
+            {% endif %}
+
+            <label>Логин
+                {{ form.username }}
+            </label>
+            <label>Имя
+                {{ form.first_name }}
+            </label>
+            <label>Email
+                {{ form.email }}
+            </label>
+            <label>Пароль
+                {{ form.password1 }}
+            </label>
+            <label>Повторите пароль
+                {{ form.password2 }}
+            </label>
+
+            <button type="submit" class="btn btn-primary">Создать аккаунт</button>
+            <p class="switch-link">Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+        </form>
+    </div>
+</body>
+</html>

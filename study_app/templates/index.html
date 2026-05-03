@@ -1,0 +1,60 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Study Helper</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <header class="hero-header">
+        <nav class="nav container">
+            <a class="brand" href="{% url 'index' %}">AI Study Helper</a>
+            <div class="nav-links">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-outline">Панель</a>
+                    <a href="{% url 'logout' %}" class="btn btn-primary">Выход</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline">Войти</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary">Регистрация</a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <section class="hero container">
+            <div class="hero-text">
+                <h1>Умный помощник для подготовки к учебе и олимпиадам</h1>
+                <p>Тесты по предметам, персональная статистика и AI-помощник в одном современном веб-приложении.</p>
+                <a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'register' %}{% endif %}" class="btn btn-cta">Начать обучение</a>
+            </div>
+            <div class="hero-card card">
+                <h3>Что внутри?</h3>
+                <ul class="feature-list">
+                    <li>Онлайн тесты с автопроверкой</li>
+                    <li>Личный кабинет и результаты</li>
+                    <li>REST API для интеграций</li>
+                    <li>AI-помощник для быстрых подсказок</li>
+                </ul>
+            </div>
+        </section>
+    </header>
+
+    <main class="container section-grid">
+        <article class="card">
+            <h2>Интерактивное обучение</h2>
+            <p>Выбирайте предмет, проходите тесты и отслеживайте прогресс в реальном времени.</p>
+        </article>
+        <article class="card">
+            <h2>Гибкая архитектура</h2>
+            <p>Django + SQLite + API позволяют быстро развивать проект и добавлять новые модули.</p>
+        </article>
+        <article class="card">
+            <h2>Современный дизайн</h2>
+            <p>Минималистичный интерфейс, плавные анимации и адаптивность для всех устройств.</p>
+        </article>
+    </main>
+
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>

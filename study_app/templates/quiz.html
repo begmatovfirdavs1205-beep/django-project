@@ -1,0 +1,48 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject.name }} | Тест</title>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="container nav">
+            <a class="brand" href="{% url 'dashboard' %}">AI Study Helper</a>
+            <div class="nav-links">
+                <a href="{% url 'dashboard' %}" class="btn btn-outline">Назад</a>
+                <a href="{% url 'logout' %}" class="btn btn-primary">Выход</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container quiz-layout" id="quiz-root" data-submit-url="{% url 'submit_quiz_api' subject.id %}">
+        <section class="card">
+            <h1>Тест: {{ subject.name }}</h1>
+            <p>{{ subject.description }}</p>
+        </section>
+
+        <form id="quiz-form" class="quiz-form card">
+            {% csrf_token %}
+            {% for question in questions %}
+                <article class="question-card">
+                    <h3>{{ forloop.counter }}. {{ question.prompt }}</h3>
+                    <label><input type="radio" name="q_{{ question.id }}" value="A"> A) {{ question.option_a }}</label>
+                    <label><input type="radio" name="q_{{ question.id }}" value="B"> B) {{ question.option_b }}</label>
+                    <label><input type="radio" name="q_{{ question.id }}" value="C"> C) {{ question.option_c }}</label>
+                    <label><input type="radio" name="q_{{ question.id }}" value="D"> D) {{ question.option_d }}</label>
+                </article>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-cta">Проверить результат</button>
+        </form>
+
+        <section class="card" id="quiz-result"></section>
+    </main>
+
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>
